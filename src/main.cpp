@@ -26,11 +26,11 @@ void handleKeypress(unsigned char key, int x, int y) {
   switch (key) {
   case key::zoom_in:
     window::zoom++;
-    if (scale > 100) scale = 100;
+    if (window::zoom > 100) window::zoom = 100;
     break;
   case key::zoom_out:
     window::zoom--;
-    if (scale < 1) scale = 1;
+    if (window::zoom < 1) window::zoom = 1;
     break;
   case key::exit:
     exit(0);

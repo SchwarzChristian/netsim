@@ -22,4 +22,6 @@ public:
   ~Map();
 };
 
+void draw(terrain_t tile, int x, int y);
+
 #endif

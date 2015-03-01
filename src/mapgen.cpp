@@ -1,5 +1,10 @@
-#include "mapgen.hpp"
 #include <iostream>
+
+#include "mapgen.hpp"
+#include "helper.hpp"
+
+extern int tileset_len;
+extern Color *tileset[];
 
 using namespace std;
 
@@ -64,4 +69,14 @@ Map::~Map(){
   }
   delete [] _map;
   return;
+}
+
+void draw(terrain_t tile, int x, int y) {
+  if (tile < tileset_len) tileset[tile]->use();
+  glBegin(GL_QUADS);
+  glVertex2i(x    , y    );
+  glVertex2i(x + 1, y    );
+  glVertex2i(x + 1, y + 1);
+  glVertex2i(x    , y + 1);
+  glEnd();
 }

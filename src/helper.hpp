@@ -7,7 +7,6 @@
 #include "main.hpp"
 
 typedef unsigned char color_t;
-typedef enum {TERRAIN_NORMAL, TERRAIN_TOWN} terrain_t;
 
 int get_random( int max);
 
@@ -38,7 +37,5 @@ public:
   Color& operator -=(Color other);
   Color& operator -=(color_t other);
 };
-
-void draw(terrain_t tile, int x, int y);
 
 #endif

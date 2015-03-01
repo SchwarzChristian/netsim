@@ -25,7 +25,7 @@ Point::~Point(){
 }
 
 int tileset_len = 2;
-Color * tileset[] = {
+Color *tileset[] = {
   new Color(  0, 255, 0, 255),
   new Color(127,   0, 0, 255)
 };
@@ -71,14 +71,4 @@ Color& Color::operator -=(Color other) {
 Color& Color::operator -=(color_t other) {
   if (a - other > 0) a -= other; else a = 0;
   return *this;
-}
-
-void draw(terrain_t tile, int x, int y) {
-  if (tile < tileset_len) tileset[tile]->use();
-  glBegin(GL_QUADS);
-  glVertex2i(x    , y    );
-  glVertex2i(x + 1, y    );
-  glVertex2i(x + 1, y + 1);
-  glVertex2i(x    , y + 1);
-  glEnd();
 }
