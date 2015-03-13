@@ -1,30 +1,32 @@
 #include <iostream>
 
 #include "mapgen.hpp"
-#include "helper.hpp"
-
-extern int tileset_len;
-extern Color *tileset[];
 
 using namespace std;
 
-Map& Map::set(Point p,terrain_t type){
-  if ( p.x >= 0 and p.x < _w and p.y >= 0 and p.y < _h ) {
-      _map [p.y][p.x] = type;
-    }
-    return *this;
-    }
+int tileset_len = 2;
+Color *tileset[] = {
+  new Color(  0, 255, 0, 255),	// TERRAIN_NORMAL
+  new Color(127,   0, 0, 255)	// TERRAIN_TOWN
+};
 
-
-Map::Map(){
-  _map=NULL;
+terrain_t& Chunk::operator [](Point other) {
+  if (other.x < _w and other.x > 0 and other.y < _h and other.y > 0)
+    return _map[other.y][other.x];
+  else return _map[0][0];
 }
 
-Map::Map(int w, int h){
+Chunk::Chunk(){
+  _map=NULL;
+  _dlist = -1;
+}
+
+Chunk::Chunk(int w, int h){
   init(w,h);
 }
 
- Map& Map::init(int w, int h,int seed){
+Chunk& Chunk::init(int w, int h,int seed){
+  _dlist = -1;
   _w=w;
   _h=h;
   srand(seed);
@@ -37,23 +39,24 @@ Map::Map(int w, int h){
   }
   return *this;
 }
- Map& Map::genTowns(int size,int count){
+
+Chunk& Chunk::genTowns(int size,int count){
   Point p,q;
   int s_t=0;  
   for(;count>0;count--){
     p.set(get_random(_w),get_random(_h));
-    set(p,TERRAIN_TOWN);
+    (*this)[p] = TERRAIN_TOWN;
     s_t=get_random(size);    
     for(int i=0;i<s_t;i++){
       q.set(get_random(3)-1,get_random(3)-1);
       p+=q;
-      set(p,TERRAIN_TOWN);
+      (*this)[p] = TERRAIN_TOWN;
     }
   }
   return *this;
 }
 
-Map& Map::dump() {
+Chunk& Chunk::dump() {
   for (int i = 0; i < _h; i++) {
     for (int j = 0; j < _w; j++)
       cout << _map[i][j];
@@ -62,21 +65,33 @@ Map& Map::dump() {
   return *this;
 }
 
-Map::~Map(){
+
+Chunk& Chunk::draw() {
+  if (_dlist < 0) {
+    _dlist = glGenLists(1);
+    glNewList(_dlist, GL_COMPILE);
+    glBegin(GL_QUADS);
+    for (int y = 0; y < _h; y++)
+      for (int x = 0; x < _w; x++) {
+	if (_map[y][x] < tileset_len) tileset[_map[y][x]]->use();
+	else tileset[0]->use();
+	glVertex2i(x    , -y    );
+	glVertex2i(x    , -y - 1);
+	glVertex2i(x + 1, -y - 1);
+	glVertex2i(x + 1, -y    );
+      }
+    glEnd();
+    glEndList();
+  }
+  glCallList(_dlist);
+  return *this;
+}
+
+Chunk::~Chunk(){
   if (not _map) return ;
   for(int i;i<_h;i++){
     delete [] _map[i];
   }
   delete [] _map;
   return;
-}
-
-void draw(terrain_t tile, int x, int y) {
-  if (tile < tileset_len) tileset[tile]->use();
-  glBegin(GL_QUADS);
-  glVertex2i(x    , y    );
-  glVertex2i(x + 1, y    );
-  glVertex2i(x + 1, y + 1);
-  glVertex2i(x    , y + 1);
-  glEnd();
 }

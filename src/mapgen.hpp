@@ -3,25 +3,26 @@
 
 #include "helper.hpp"
 
-typedef enum {TERRAIN_NORMAL,TERRAIN_TOWN} terrain_t;
+typedef enum { TERRAIN_NORMAL, TERRAIN_TOWN } terrain_t;
 
-class Map {
-private:  
+class Chunk {
+private:
   terrain_t ** _map;
+  int _dlist;
   int _w;
   int _h;
-  Map& set(Point p,terrain_t type);
+  
+  terrain_t& operator [](Point other);
 public:
-  Map(int w, int h);
-  Map();
+  Chunk(int w, int h);
+  Chunk();
 
-  Map& init(int w, int h,int seed = time(NULL));
-  Map& genTowns(int size,int count);
-  Map& dump();
+  Chunk& init(int w, int h,int seed = time(NULL));
+  Chunk& genTowns(int size,int count);
+  Chunk& dump();
+  Chunk& draw();
 
-  ~Map();
+  ~Chunk();
 };
-
-void draw(terrain_t tile, int x, int y);
 
 #endif

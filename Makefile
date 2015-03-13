@@ -1,6 +1,6 @@
 CC		= g++
 CFLAGS		= -Wall -g
-LIBRARIES	= -Iinclude/ -Llib/ -lGL -lGLU -lglut
+LIBRARIES	= -lGL -lGLU -lglut
 OBJECTS		= $(patsubst %.cpp, %.o, $(wildcard src/*.cpp))
 BINARY		= netsim
 
@@ -12,6 +12,9 @@ all: $(OBJECTS)
 
 run: all
 	./$(BINARY)
+
+debug: all
+	gdb $(BINARY)
 
 clean:
 	rm -f src/*.o

@@ -1,6 +1,8 @@
 #ifndef __HELPER_HPP__
 #define __HELPER_HPP__
 
+#include <iostream>
+
 #include <cstdlib>
 #include <ctime>
 
@@ -8,7 +10,7 @@
 
 typedef unsigned char color_t;
 
-int get_random( int max);
+int get_random(int max);
 
 class Point {
 public:

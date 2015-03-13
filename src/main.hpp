@@ -4,7 +4,7 @@
 #include <GL/glut.h>
 #include <png.h>
 
+#include "mapgen.hpp"
 #include "helper.hpp"
-
 
 #endif

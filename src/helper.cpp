@@ -24,12 +24,6 @@ Point::~Point(){
   
 }
 
-int tileset_len = 2;
-Color *tileset[] = {
-  new Color(  0, 255, 0, 255),
-  new Color(127,   0, 0, 255)
-};
-
 Color::Color(color_t r, color_t g, color_t b, color_t a) {
   set(r, g, b, a);
 }
@@ -43,7 +37,7 @@ Color& Color::set(color_t r, color_t g, color_t b, color_t a) {
 }
 
 Color& Color::use() {
-  glColor4i(r, g, b, a);
+  glColor4ub(r, g, b, a);
   return *this;
 }
 
