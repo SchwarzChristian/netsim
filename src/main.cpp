@@ -166,7 +166,7 @@ int main(int argc, char* argv[]) {
 
   cam::pos.set(MAP_WIDTH / 2, -MAP_HEIGHT / 2);
   cam::zoom = 1;
-  map.init(MAP_WIDTH, MAP_HEIGHT).genTowns(100, 10);
+  map.init(MAP_WIDTH, MAP_HEIGHT).genMountains(100, 10).genTowns(100, 10);
 
   update(0);
   

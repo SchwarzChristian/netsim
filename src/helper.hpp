@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include <ctime>
 
-#include "main.hpp"
+#include <GL/glut.h>
 
 typedef unsigned char color_t;
 

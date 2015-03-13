@@ -1,16 +1,18 @@
 #include <iostream>
 
 #include "mapgen.hpp"
+#include "List.hpp"
 
 using namespace std;
 
-int tileset_len = 2;
+int tileset_len = 3;
 Color *tileset[] = {
-  new Color(  0, 255, 0, 255),	// TERRAIN_NORMAL
-  new Color(127,   0, 0, 255)	// TERRAIN_TOWN
+  new Color(  0, 255,   0, 255),	// TERRAIN_NORMAL
+  new Color(127,   0,   0, 255),	// TERRAIN_TOWN
+  new Color(127, 127, 127, 255)		// TERRAIN_MOUNTAIN
 };
 
-terrain_t& Chunk::operator [](Point other) {
+terrain_t& Chunk::operator[](Point& other) {
   if (other.x < _w and other.x > 0 and other.y < _h and other.y > 0)
     return _map[other.y][other.x];
   else return _map[0][0];
@@ -40,18 +42,47 @@ Chunk& Chunk::init(int w, int h,int seed){
   return *this;
 }
 
-Chunk& Chunk::genTowns(int size,int count){
+Chunk& Chunk::genMountains(int size,int count){
   Point p,q;
-  int s_t=0;  
+  int s_t=0;
+  
   for(;count>0;count--){
     p.set(get_random(_w),get_random(_h));
-    (*this)[p] = TERRAIN_TOWN;
+    (*this)[p] = TERRAIN_MOUNTAIN;
     s_t=get_random(size);    
     for(int i=0;i<s_t;i++){
       q.set(get_random(3)-1,get_random(3)-1);
       p+=q;
+      (*this)[p] = TERRAIN_MOUNTAIN;
+    }
+  }
+  return *this;
+}
+
+Chunk& Chunk::genTowns(int size, int count){
+  Point p;
+  int s_t=0;
+  List<Point>* list;
+
+  for(;count>0;count--) {
+    p.set(get_random(_w),get_random(_h));
+    s_t = get_random(size);
+    list = new List<Point>();
+    for(int i=0;i<s_t;i++) {
+      if(i){
+	while((*this)[p] != TERRAIN_NORMAL and list->count() ) {
+	  p=*((*list)>>get_random(list->count())).current();
+	  (*list)--;
+	}
+	if(not list->count()) break;
+      }
+      (*list)+=new Point(p.x+1,p.y);
+      (*list)+=new Point(p.x  ,p.y+1);
+      (*list)+=new Point(p.x-1,p.y);
+      (*list)+=new Point(p.x  ,p.y-1);
       (*this)[p] = TERRAIN_TOWN;
     }
+    delete list;
   }
   return *this;
 }
@@ -64,7 +95,6 @@ Chunk& Chunk::dump() {
   }
   return *this;
 }
-
 
 Chunk& Chunk::draw() {
   if (_dlist < 0) {

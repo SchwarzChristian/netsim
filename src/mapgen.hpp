@@ -3,7 +3,7 @@
 
 #include "helper.hpp"
 
-typedef enum { TERRAIN_NORMAL, TERRAIN_TOWN } terrain_t;
+typedef enum { TERRAIN_NORMAL, TERRAIN_TOWN, TERRAIN_MOUNTAIN } terrain_t;
 
 class Chunk {
 private:
@@ -12,13 +12,14 @@ private:
   int _w;
   int _h;
   
-  terrain_t& operator [](Point other);
+  terrain_t& operator[](Point& other);
 public:
   Chunk(int w, int h);
   Chunk();
 
   Chunk& init(int w, int h,int seed = time(NULL));
   Chunk& genTowns(int size,int count);
+  Chunk& genMountains(int size, int count);  
   Chunk& dump();
   Chunk& draw();
 
