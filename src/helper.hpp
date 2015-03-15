@@ -20,6 +20,7 @@ public:
   Point& set(int x,int y);
   Point& operator +(Point p);
   Point& operator +=(Point p);
+  char*  to_s();
   ~Point();
 };
 

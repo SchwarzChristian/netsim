@@ -1,3 +1,5 @@
+#include <cstdio>
+
 #include "helper.hpp"
 
 int get_random(int max){
@@ -20,6 +22,14 @@ Point& Point::operator +=(Point p){
   y+=p.y;
   return *this;
 }
+
+char* Point::to_s() {
+  const int bufsize = 64;
+  static char ret[bufsize];
+  snprintf(ret, bufsize, "(%d;%d)", x, y);
+  return ret;
+}
+
 Point::~Point(){
   
 }

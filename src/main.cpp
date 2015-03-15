@@ -9,7 +9,12 @@
 #define MAP_HEIGHT 256
 
 #define SCROLL_AREA 10
-#define SCROLL_SPEED  32 / cam::zoom
+#define SCROLL_SPEED  (32 / cam::zoom)
+
+#define CLIP_LEFT     (window::w / 2 / cam::zoom - 1)
+#define CLIP_RIGHT    (MAP_WIDTH - window::w / 2 / cam::zoom + 1)
+#define CLIP_BOTTOM   (window::h / 2 / cam::zoom - MAP_HEIGHT - 1)
+#define CLIP_TOP      (-window::h / 2 / cam::zoom + 1)
 
 typedef enum {
   MOUSE_LEFT		= 0,
@@ -135,6 +140,10 @@ using namespace window;
 void update(int counter) {
   glutTimerFunc(1000 / 60.0, update, counter + 1);
   cam::pos += cam::mouse_speed + cam::key_speed;
+  if (cam::pos.x < CLIP_LEFT)    cam::pos.x = CLIP_LEFT;
+  if (cam::pos.x > CLIP_RIGHT)   cam::pos.x = CLIP_RIGHT;
+  if (cam::pos.y < CLIP_BOTTOM)  cam::pos.y = CLIP_BOTTOM;
+  if (cam::pos.y > CLIP_TOP)     cam::pos.y = CLIP_TOP;
   glutPostRedisplay();
 }
 
