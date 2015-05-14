@@ -1,0 +1,31 @@
+infastruktur:
+	3 gebäude: produzent, verteiler, konsument
+	1 leitung
+
+verknüpfung wid als graph dargstellt zb:
+
+p→v→k
+  ↑
+p→↑
+
+der graph wird mittels tiefensuche durchiteriert und dabei die lastverteilung ermittelt
+
+entstandene kreise sind erlaubt, wenn erkannt wird die last noch an die kante geschrieben, ihr aber nicht mehr gefolgt
+
+die Netzwerkberechung beginnt immer bei den produzenten
+
+vor jeder Netzwerkberechnung wird die last im Netz auf 0 gesetzt um Kreise wirkungslos zu machen (dienen nciht mehr als energiespeicher)
+
+die infrastuktur wird in einer 2d liste gespeichert wobei die erste dimension die x koordinaten ergeben, die 2. die y
+
+2→5→9→23
+  ↓   ↓
+  12  42
+  ↓
+  13
+
+
+diese liste ist der suchindex auf den graphen , wo jede koordinate (x,y) auf einen knoten im graphen verweist
+
+der knoten im graph auf die entsprechene infrastuktur - instanz
+

@@ -5,22 +5,46 @@
 int get_random(int max){
   return rand() % max;
 }
+
 Point::Point(int x,int y){
   set(x,y);
 }
+
 Point& Point::set(int x, int y){
   this->x=x;
   this->y=y;
   return *this;
 }
+
+Point& Point::set(Point const& p){
+  this->x=p.x;
+  this->y=p.y;
+  return *this;
+}
+
+Point& Point::mod(int x, int y) {
+  this->x += x;
+  this->y += y;
+  return *this;
+}
+
 Point& Point::operator +(Point p){
   Point f(p);
   return f+=*this;
 }
+
 Point& Point::operator +=(Point p){
   x+=p.x;
   y+=p.y;
   return *this;
+}
+
+int Point::operator ==(Point const& p) {
+  return x == p.x and y == p.y;
+}
+
+int Point::operator !=(Point const& p) {
+  return x != p.x or y != p.y;
 }
 
 char* Point::to_s() {

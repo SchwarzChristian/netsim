@@ -3,7 +3,15 @@
 
 #include "helper.hpp"
 
-typedef enum { TERRAIN_NORMAL, TERRAIN_TOWN, TERRAIN_MOUNTAIN } terrain_t;
+#define PI 3.1415926535
+
+typedef enum {
+  TERRAIN_NORMAL,
+  TERRAIN_TOWN,
+  TERRAIN_MOUNTAIN,
+  TERRAIN_LAKE,
+  TERRAIN_RIVER
+} terrain_t;
 
 class Chunk {
 private:
@@ -19,6 +27,8 @@ public:
 
   Chunk& init(int w, int h,int seed = time(NULL));
   Chunk& genTowns(int size,int count);
+  Chunk& genLakes(int size,int count);
+  Chunk& genRivers(int size, int count, float variation);
   Chunk& genMountains(int size, int count);  
   Chunk& dump();
   Chunk& draw();

@@ -4,6 +4,7 @@
 #include <png.h>
 
 #include "main.hpp"
+#include "OList.hpp"
 
 #define MAP_WIDTH 256
 #define MAP_HEIGHT 256
@@ -140,19 +141,27 @@ using namespace window;
 void update(int counter) {
   glutTimerFunc(1000 / 60.0, update, counter + 1);
   cam::pos += cam::mouse_speed + cam::key_speed;
-  if (cam::pos.x < CLIP_LEFT)    cam::pos.x = CLIP_LEFT;
-  if (cam::pos.x > CLIP_RIGHT)   cam::pos.x = CLIP_RIGHT;
-  if (cam::pos.y < CLIP_BOTTOM)  cam::pos.y = CLIP_BOTTOM;
-  if (cam::pos.y > CLIP_TOP)     cam::pos.y = CLIP_TOP;
+  if (CLIP_RIGHT - CLIP_LEFT < 0) {
+    cam::pos.x =  MAP_WIDTH  / 2;
+  } else {
+    if (cam::pos.x < CLIP_LEFT)    cam::pos.x = CLIP_LEFT;
+    if (cam::pos.x > CLIP_RIGHT)   cam::pos.x = CLIP_RIGHT;
+  }
+  if (CLIP_TOP - CLIP_BOTTOM < 0) {
+    cam::pos.y = -MAP_HEIGHT / 2;
+  } else {
+    if (cam::pos.y < CLIP_BOTTOM)  cam::pos.y = CLIP_BOTTOM;
+    if (cam::pos.y > CLIP_TOP)     cam::pos.y = CLIP_TOP;
+  }
   glutPostRedisplay();
 }
 
 void renderScene() {
-  glClear(GL_COLOR_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glLoadIdentity();
   
-  glScalef(cam::zoom, cam::zoom, 1);
+  glScalef(cam::zoom, cam::zoom, 1.0);
   glTranslatef(-cam::pos.x, -cam::pos.y, 0);
   map.draw();
 
@@ -163,7 +172,7 @@ void renderScene() {
 
 int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
-  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutCreateWindow("netsim");
 
   glutKeyboardFunc(handleKeypress);
@@ -175,7 +184,12 @@ int main(int argc, char* argv[]) {
 
   cam::pos.set(MAP_WIDTH / 2, -MAP_HEIGHT / 2);
   cam::zoom = 1;
-  map.init(MAP_WIDTH, MAP_HEIGHT).genMountains(100, 10).genTowns(100, 10);
+  map
+    .init(MAP_WIDTH, MAP_HEIGHT)
+    .genLakes(100, 10)
+    .genRivers(100, 10, PI / 4)
+    .genMountains(100, 10)
+    .genTowns(100, 10);
 
   update(0);
   

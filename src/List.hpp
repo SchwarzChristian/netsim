@@ -15,9 +15,9 @@ private:
   unsigned int _count;
 public:
                 List<T>(T*data = NULL);
-  List<T>&      operator>>(unsigned int i);
-  List<T>&      operator+=(T* data );
-  List<T>&      operator--(int);
+  List<T>&      operator>>(unsigned int i); // iterates through list
+  List<T>&      operator+=(T* data );	    // adds element to list
+  List<T>&      operator--(int);	    // removes element from list
   T*            current();
   unsigned int  count();
                 ~List<T>();
@@ -41,7 +41,7 @@ template <class T>
 List<T>& List<T>::operator>>(unsigned int i){
   if(_current) {
     for(;i;--i){
-      _current = _current->_next;      
+      _current = _current->_next;
     }
   }
   return *this;
@@ -62,7 +62,7 @@ List<T>& List<T>::operator+=(T* data) {
 }
 
 template <class T>
-List<T>& List<T>::operator--(int ) {
+List<T>& List<T>::operator--(int) {
   if (not _current) {
     return *this;
   }

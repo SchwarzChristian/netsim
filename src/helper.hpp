@@ -9,6 +9,7 @@
 #include <GL/glut.h>
 
 typedef unsigned char color_t;
+typedef enum {DIR_NORTH, DIR_SOUTH, DIR_EAST, DIR_WEST} directions_t; // cardinal directions
 
 int get_random(int max);
 
@@ -18,8 +19,12 @@ public:
   int y;
   Point(int x=0,int y=0);
   Point& set(int x,int y);
+  Point& mod(int x, int y);
+  Point& set(Point const& p);
   Point& operator +(Point p);
   Point& operator +=(Point p);
+  int    operator ==(Point const& p);
+  int    operator !=(Point const& p);
   char*  to_s();
   ~Point();
 };
